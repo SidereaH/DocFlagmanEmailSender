@@ -1,6 +1,19 @@
 version: '3'
 
 services:
+  postgres_container_docsmail:
+    image: postgres:15
+    container_name: postgres_container_docsmail
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+      PGDATA: /data/postgres
+    volumes:
+      - postgres-data:/data/postgres
+      - ./initdb:/docker-entrypoint-initdb.d
+    ports:
+      - "5435:5432"
   zookeeper:
     image: confluentinc/cp-zookeeper:7.4.0
     container_name: zookeeper
@@ -54,3 +67,17 @@ services:
     depends_on:
       - kafka1
       - kafka2
+  mail-service:
+#    build: .
+    image: aliquamsiderea/flagman_mailsender:0.1.2
+    container_name: flagman_mail
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_container_docsmail:5432/flagman_docsmail
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SMTP_MAILRU_PASSWORD=${SMTP_MAILRU_PASSWORD}
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=localhost:9092
+      - SPRING_KAFKA_PRODUCER_KEY_SERIALIZER=org.apache.kafka.common.serialization.StringSerializer
+      - SPRING_KAFKA_PRODUCER_VALUE_SERIALIZER=org.springframework.kafka.support.serializer.JsonSerializer
+volumes:
+  postgres-data:

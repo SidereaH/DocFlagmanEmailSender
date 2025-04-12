@@ -3,6 +3,8 @@ package flagman.docmailsender.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import flagman.docmailsender.models.ApproveRequest;
+import flagman.docmailsender.models.EmailEntity;
+import flagman.docmailsender.repositories.EmailEntityRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -16,21 +18,28 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import java.time.LocalDateTime;
 import java.util.Properties;
 
 @Service
 public class MailSender {
+    private final EmailEntityRepository emailEntityRepository;
     @Value("${flagman.mail.sender}")
     private String sender;
     @Value("${flagman.mail.password}")
     private String password;
-    public MailSender() {
+    public MailSender(EmailEntityRepository emailEntityRepository) {
+        this.emailEntityRepository = emailEntityRepository;
     }
 
     @KafkaListener(topics = "approve-topic", groupId = "mail-group")
     public Boolean sendNotification(String approveJson) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         ApproveRequest approve = mapper.readValue(approveJson, ApproveRequest.class);
+        EmailEntity email = new EmailEntity();
+        email.setEmail(approve.getEmail());
+        email.setCode(approve.getCode());
+        email.setCreatedAt(LocalDateTime.now());
             // Email details
             String to = approve.getEmail();
             String host = "smtp.mail.ru";
@@ -174,6 +183,8 @@ public class MailSender {
 
 
                 Transport.send(message);
+                email.setSentAt(LocalDateTime.now());
+                emailEntityRepository.save(email);
                 return true;
             } catch (Exception mex) {
                 mex.printStackTrace();
@@ -182,7 +193,10 @@ public class MailSender {
 
     }
     public Boolean sendNotification(ApproveRequest approve) throws JsonProcessingException {
-
+        EmailEntity email = new EmailEntity();
+        email.setEmail(approve.getEmail());
+        email.setCode(approve.getCode());
+        email.setCreatedAt(LocalDateTime.now());
         // Email details
         String to = approve.getEmail();
         String host = "smtp.mail.ru";
@@ -328,6 +342,8 @@ public class MailSender {
 
             Transport.send(message);
             System.out.println("SUCESS");
+            email.setSentAt(LocalDateTime.now());
+            emailEntityRepository.save(email);
             return true;
         } catch (Exception mex) {
             mex.printStackTrace();
