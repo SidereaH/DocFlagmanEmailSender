@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: DocMailSender
+  mail:
+    properties:
+      mail:
+        smtp:
+          ssl:
+            trust: "smtp.mail.ru"
+  kafka:
+    bootstrap-servers:
+      - localhost:9092
+    #      - localhost:9093
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+server:
+  port: 8081
+
+flagman:
+  mail:
+    password: ${SMTP_MAILRU_PASSWORD}
+    sender: "docs.flagman@mail.ru"
