@@ -75,7 +75,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_container_docsmail:5432/flagman_docsmail
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
-      - SMTP_MAILRU_PASSWORD=${SMTP_MAILRU_PASSWORD}
+      - SMTP_MAILRU_PASSWORD=i4Mu0hJha1m3BDsUfYjA
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=localhost:9092
       - SPRING_KAFKA_PRODUCER_KEY_SERIALIZER=org.apache.kafka.common.serialization.StringSerializer
       - SPRING_KAFKA_PRODUCER_VALUE_SERIALIZER=org.springframework.kafka.support.serializer.JsonSerializer
