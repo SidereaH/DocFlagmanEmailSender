@@ -54,19 +54,121 @@ public class MailSender {
                 MimeMessage message = new MimeMessage(session);
                 message.setFrom(new InternetAddress(sender));
                 message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-                message.setSubject("Код подтверждения подписания документа.");
+                message.setSubject("Код подтверждения подписания документа");
 
-                // Adding Attachments
+// Создаем мультипарт сообщение
                 Multipart multipart = new MimeMultipart();
-                BodyPart messageBodyPart = new MimeBodyPart();
-                messageBodyPart.setText("Your code: " + approve.getCode());
-                multipart.addBodyPart(messageBodyPart);
 
-//                messageBodyPart = new MimeBodyPart();
-//                DataSource source = new FileDataSource("path/to/attachment.txt"); // Replace with the actual file path
-//                messageBodyPart.setDataHandler(new DataHandler(source));
-//                messageBodyPart.setFileName("attachment.txt");
-//                multipart.addBodyPart(messageBodyPart);
+// Текстовая часть сообщения (HTML)
+                MimeBodyPart htmlPart = new MimeBodyPart();
+                String htmlContent = """
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #4a6fa5;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px 5px 0 0;
+        }
+        .content {
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-left: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+        }
+        .code {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4a6fa5;
+            text-align: center;
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #e7eff9;
+            border-radius: 5px;
+            letter-spacing: 3px;
+        }
+        .footer {
+            padding: 15px;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+            background-color: #eee;
+            border-radius: 0 0 5px 5px;
+            border-left: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4a6fa5;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Подтверждение подписания документа</h2>
+    </div>
+    
+    <div class="content">
+        <p>Здравствуйте,</p>
+        <p>Для завершения процедуры подписания документа, пожалуйста, используйте следующий код подтверждения:</p>
+        
+        <div class="code">%s</div>
+        
+        <p>Этот код действителен в течение 15 минут. Если вы не запрашивали подписание документа, проигнорируйте это сообщение.</p>
+        
+        <p>С уважением,<br>Команда поддержки</p>
+    </div>
+    
+    <div class="footer">
+        <p>© 2023 Ваша компания. Все права защищены.</p>
+        <p>Это письмо было отправлено автоматически. Пожалуйста, не отвечайте на него.</p>
+    </div>
+</body>
+</html>
+""".formatted(approve.getCode());
+
+                htmlPart.setContent(htmlContent, "text/html; charset=utf-8");
+                multipart.addBodyPart(htmlPart);
+
+// Альтернативная текстовая версия для почтовых клиентов, которые не поддерживают HTML
+                MimeBodyPart textPart = new MimeBodyPart();
+                String textContent = """
+Подтверждение подписания документа
+
+Здравствуйте,
+
+Для завершения процедуры подписания документа, пожалуйста, используйте следующий код подтверждения:
+
+%s
+
+Этот код действителен в течение 15 минут. Если вы не запрашивали подписание документа, проигнорируйте это сообщение.
+
+С уважением,
+Команда поддержки
+
+© 2023 Ваша компания. Все права защищены.
+""".formatted(approve.getCode());
+
+                textPart.setText(textContent);
+                multipart.addBodyPart(textPart);
 
                 message.setContent(multipart);
 
@@ -104,21 +206,124 @@ public class MailSender {
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(sender));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            message.setSubject("Your email subject goes here");
+            message.setSubject("Код подтверждения подписания документа");
 
-            // Adding Attachments
+// Создаем мультипарт сообщение
             Multipart multipart = new MimeMultipart();
-            BodyPart messageBodyPart = new MimeBodyPart();
-            messageBodyPart.setText("Your code: " + approve.getCode());
-            multipart.addBodyPart(messageBodyPart);
 
-//                messageBodyPart = new MimeBodyPart();
-//                DataSource source = new FileDataSource("path/to/attachment.txt"); // Replace with the actual file path
-//                messageBodyPart.setDataHandler(new DataHandler(source));
-//                messageBodyPart.setFileName("attachment.txt");
-//                multipart.addBodyPart(messageBodyPart);
+// Текстовая часть сообщения (HTML)
+            MimeBodyPart htmlPart = new MimeBodyPart();
+            String htmlContent = """
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #4a6fa5;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px 5px 0 0;
+        }
+        .content {
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-left: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+        }
+        .code {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4a6fa5;
+            text-align: center;
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #e7eff9;
+            border-radius: 5px;
+            letter-spacing: 3px;
+        }
+        .footer {
+            padding: 15px;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+            background-color: #eee;
+            border-radius: 0 0 5px 5px;
+            border-left: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4a6fa5;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Подтверждение подписания документа</h2>
+    </div>
+    
+    <div class="content">
+        <p>Здравствуйте,</p>
+        <p>Для завершения процедуры подписания документа, пожалуйста, используйте следующий код подтверждения:</p>
+        
+        <div class="code">%s</div>
+        
+        <p>Этот код действителен в течение 15 минут. Если вы не запрашивали подписание документа, проигнорируйте это сообщение.</p>
+        
+        <p>С уважением,<br>Команда поддержки</p>
+    </div>
+    
+    <div class="footer">
+        <p>© 2023 Ваша компания. Все права защищены.</p>
+        <p>Это письмо было отправлено автоматически. Пожалуйста, не отвечайте на него.</p>
+    </div>
+</body>
+</html>
+""".formatted(approve.getCode());
+
+            htmlPart.setContent(htmlContent, "text/html; charset=utf-8");
+            multipart.addBodyPart(htmlPart);
+
+// Альтернативная текстовая версия для почтовых клиентов, которые не поддерживают HTML
+            MimeBodyPart textPart = new MimeBodyPart();
+            String textContent = """
+Подтверждение подписания документа
+
+Здравствуйте,
+
+Для завершения процедуры подписания документа, пожалуйста, используйте следующий код подтверждения:
+
+%s
+
+Этот код действителен в течение 15 минут. Если вы не запрашивали подписание документа, проигнорируйте это сообщение.
+
+С уважением,
+Команда поддержки
+
+© 2025 Флагман. Все права защищены.
+""".formatted(approve.getCode());
+
+            textPart.setText(textContent);
+            multipart.addBodyPart(textPart);
 
             message.setContent(multipart);
+
 
 
             Transport.send(message);
