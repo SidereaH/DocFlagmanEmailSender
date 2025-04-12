@@ -6,6 +6,8 @@ import flagman.docmailsender.models.EmailEntity;
 import flagman.docmailsender.models.dto.EmailDTO;
 import flagman.docmailsender.repositories.EmailEntityRepository;
 import flagman.docmailsender.services.MailSender;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.AccessType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +18,8 @@ import java.util.List;
 @RequestMapping("/mail")
 public class MailController {
     private final MailSender mailSender;
-    private final EmailEntityRepository emailEntityRepository;
-
+    private EmailEntityRepository emailEntityRepository;
+    @Autowired
     public MailController(MailSender mailSender, EmailEntityRepository emailEntityRepository) {
         this.mailSender = mailSender;
         this.emailEntityRepository = emailEntityRepository;

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import flagman.docmailsender.models.ApproveRequest;
 import flagman.docmailsender.models.EmailEntity;
 import flagman.docmailsender.repositories.EmailEntityRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -28,6 +29,7 @@ public class MailSender {
     private String sender;
     @Value("${flagman.mail.password}")
     private String password;
+    @Autowired
     public MailSender(EmailEntityRepository emailEntityRepository) {
         this.emailEntityRepository = emailEntityRepository;
     }

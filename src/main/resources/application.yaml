@@ -29,5 +29,6 @@ server:
 
 flagman:
   mail:
-    password: ${SMTP_MAILRU_PASSWORD}
+#    password: ${SMTP_MAILRU_PASSWORD}
+    password: "i4Mu0hJha1m3BDsUfYjA"
     sender: "docs.flagman@mail.ru"

@@ -69,7 +69,7 @@ services:
       - kafka2
   mail-service:
 #    build: .
-    image: aliquamsiderea/flagman_mailsender:0.1.2
+    image: aliquamsiderea/flagman_mailsender:0.3.0
     container_name: flagman_mail
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_container_docsmail:5432/flagman_docsmail
