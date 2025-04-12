@@ -177,7 +177,7 @@ public class MailSender {
 С уважением,
 Команда поддержки
 
-© 2023 Ваша компания. Все права защищены.
+© 2025 Флагман. Все права защищены.
 """.formatted(approve.getCode());
 
                 textPart.setText(textContent);
