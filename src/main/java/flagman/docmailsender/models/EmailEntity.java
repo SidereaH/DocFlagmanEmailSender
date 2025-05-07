@@ -20,12 +20,13 @@ public class EmailEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String email;
+    private String phone;
     private Long code;
     private LocalDateTime createdAt;
     private LocalDateTime sentAt;
 
     public EmailDTO toEmailDTO() {
-        return new EmailDTO(this.email, this.createdAt, this.sentAt);
+        return new EmailDTO(this.email, this.code, this.createdAt, this.sentAt);
 
     }
 }
